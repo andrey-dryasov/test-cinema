@@ -28,6 +28,11 @@ class Movie
      */
     protected int $duration;
 
+    /**
+     * @ORM\Column(name="poster_url", type="string", length=512, nullable=true)
+     */
+    protected ?string $posterUrl = null;
+
     public function getId(): int
     {
         return $this->id;
@@ -55,5 +60,17 @@ class Movie
     public function getDuration(): int
     {
         return $this->duration;
+    }
+
+    public function setPosterUrl(?string $posterUrl): self
+    {
+        $this->posterUrl = $posterUrl;
+
+        return $this;
+    }
+
+    public function getPosterUrl(): ?string
+    {
+        return $this->posterUrl;
     }
 }

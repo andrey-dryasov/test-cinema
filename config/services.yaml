@@ -8,6 +8,9 @@ parameters:
 services:
     # default configuration for services in *this* file
     _defaults:
+        bind:
+            $imdbApiUrl: 'https://imdb8.p.rapidapi.com/title/find'
+            $imdbApiKey: '754237601amsh09f935cdb5ffcbfp1d2043jsn05080faa1d70'
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
@@ -23,3 +26,5 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+

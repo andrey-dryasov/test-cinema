@@ -52,4 +52,26 @@ class MovieRepository extends ServiceEntityRepository
         $this->manager->remove($movie);
         $this->manager->flush();
     }
+
+    public function getMoviesForImdbInfo(int $limit, array $excludedMovies): array
+    {
+        $queryBuilder = $this->createQueryBuilder('m');
+
+        $queryBuilder
+            ->andWhere(
+                $queryBuilder->expr()->isNull('m.posterUrl'),
+            )
+            ->orderBy('m.id')
+            ->setMaxResults($limit);
+
+        if (!empty($excludedMovies)) {
+            $queryBuilder
+                ->andWhere(
+                    $queryBuilder->expr()->notIn('m.id', ':excludedMovies')
+                )
+                ->setParameter('excludedMovies', $excludedMovies);
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }
