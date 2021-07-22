@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\People;
 use App\Entity\Type;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,7 +17,7 @@ class TypeRepository extends ServiceEntityRepository
         ManagerRegistry $registry,
         EntityManagerInterface $manager
     ) {
-        parent::__construct($registry, People::class);
+        parent::__construct($registry, Type::class);
         $this->manager = $manager;
     }
 
@@ -28,6 +27,22 @@ class TypeRepository extends ServiceEntityRepository
         $type->setName($name);
 
         $this->manager->persist($type);
+        $this->manager->flush();
+    }
+
+    public function updateType(Type $type, ?string $name): void
+    {
+        if ($name) {
+            $type->setName($name);
+        }
+
+        $this->manager->persist($type);
+        $this->manager->flush();
+    }
+
+    public function removeType(Type $type): void
+    {
+        $this->manager->remove($type);
         $this->manager->flush();
     }
 }

@@ -22,17 +22,52 @@ class PeopleRepository extends ServiceEntityRepository
         $this->manager = $manager;
     }
 
-    public function createPeople(string $firstname, string $lastname, DateTime $date, string $nationality): void
+    public function createPeople(string $firstname, string $lastname, string $date, string $nationality): void
     {
         $people = new People();
 
         $people
             ->setFirstname($firstname)
             ->setLastname($lastname)
-            ->setDateOfBirthday($date)
+            ->setDateOfBirthday(new DateTime($date))
             ->setNationality($nationality);
 
         $this->manager->persist($people);
+        $this->manager->flush();
+    }
+
+    public function updatePeople(
+        People $people,
+        ?string $firstname,
+        ?string $lastname,
+        ?string $dateOfBirth,
+        ?string $nationality
+    ): void {
+        if ($people) {
+            $people->setFirstname($firstname);
+        }
+
+        if ($people) {
+            $people->setLastname($lastname);
+        }
+
+        if ($dateOfBirth) {
+            $dateOfBirthFormat = new DateTime($dateOfBirth);
+
+            $people->setDateOfBirthday($dateOfBirthFormat);
+        }
+
+        if ($nationality) {
+            $people->setNationality($nationality);
+        }
+
+        $this->manager->persist($people);
+        $this->manager->flush();
+    }
+
+    public function removePeople(People $people): void
+    {
+        $this->manager->remove($people);
         $this->manager->flush();
     }
 }

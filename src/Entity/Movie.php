@@ -28,7 +28,7 @@ class Movie
      */
     protected int $duration;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }

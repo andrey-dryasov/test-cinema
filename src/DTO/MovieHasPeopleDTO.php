@@ -13,7 +13,7 @@ class MovieHasPeopleDTO
 
     public string $role;
 
-    public string $significance;
+    public ?string $significance;
 
     public function __construct(MovieHasPeople $movieHasPeople)
     {

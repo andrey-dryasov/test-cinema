@@ -30,10 +30,39 @@ class MovieHasPeopleRepository extends ServiceEntityRepository
         $movieHasPeople
             ->setMovie($movie)
             ->setPeople($people)
-            ->setRole($role)
-            ->setSignificance($significance);
+            ->setRole($role);
+
+        if ($significance) {
+            $movieHasPeople->setSignificance($significance);
+        }
 
         $this->manager->persist($movieHasPeople);
+        $this->manager->flush();
+    }
+
+    public function updateMovieHasPeople(
+        MovieHasPeople $movieHasPeople,
+        Movie $movie,
+        People $people,
+        string $role,
+        ?string $significance
+    ): void {
+        $movieHasPeople
+            ->setMovie($movie)
+            ->setPeople($people)
+            ->setRole($role);
+
+        if ($significance) {
+            $movieHasPeople->setSignificance($significance);
+        }
+
+        $this->manager->persist($movieHasPeople);
+        $this->manager->flush();
+    }
+
+    public function removeMovieHasPeople(MovieHasPeople $movieHasPeople): void
+    {
+        $this->manager->remove($movieHasPeople);
         $this->manager->flush();
     }
 }

@@ -14,14 +14,14 @@ class MovieHasType
     /**
      * @ORM\Id
      * @ORM\ManyToOne(targetEntity="App\Entity\Movie")
-     * @ORM\JoinColumn(name="movie_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="movie_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     protected Movie $movie;
 
     /**
      * @ORM\Id
      * @ORM\ManyToOne(targetEntity="App\Entity\Type")
-     * @ORM\JoinColumn(name="type_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="type_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     protected Type $type;
 

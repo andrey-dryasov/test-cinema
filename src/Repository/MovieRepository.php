@@ -32,4 +32,24 @@ class MovieRepository extends ServiceEntityRepository
         $this->manager->persist($movie);
         $this->manager->flush();
     }
+
+    public function updateMovie(Movie $movie, ?string $title, ?int $duration): void
+    {
+        if ($title) {
+            $movie->setTitle($title);
+        }
+
+        if ($duration) {
+            $movie->setDuration($duration);
+        }
+
+        $this->manager->persist($movie);
+        $this->manager->flush();
+    }
+
+    public function removeMovie(Movie $movie): void
+    {
+        $this->manager->remove($movie);
+        $this->manager->flush();
+    }
 }

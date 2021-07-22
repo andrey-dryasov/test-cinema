@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Enum\SignificanceType;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -14,14 +15,14 @@ class MovieHasPeople
     /**
      * @ORM\Id
      * @ORM\ManyToOne(targetEntity="App\Entity\Movie")
-     * @ORM\JoinColumn(name="movie_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="movie_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     protected Movie $movie;
 
     /**
      * @ORM\Id
      * @ORM\ManyToOne(targetEntity="App\Entity\People")
-     * @ORM\JoinColumn(name="people_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="people_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     protected People $people;
 
@@ -31,7 +32,7 @@ class MovieHasPeople
     protected string $role;
 
     /**
-     * @ORM\Column(name="significance", type="string", length=255, nullable=true)
+     * @ORM\Column(name="significance", type="significance", nullable=true)
      */
     protected ?string $significance;
 
@@ -71,7 +72,7 @@ class MovieHasPeople
         return $this->role;
     }
 
-    public function setSignificance(?string $significance): self
+    public function setSignificance(?SignificanceType $significance): self
     {
         $this->significance = $significance;
 

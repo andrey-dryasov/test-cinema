@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\DTO\MovieDTO;
 use App\Repository\MovieRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,11 +32,7 @@ class MovieController extends AbstractController
             throw new NotFoundHttpException('Movie does not exist');
         }
 
-        $data = [
-            'id' => $movie->getId(),
-            'title' => $movie->getTitle(),
-            'duration' => $movie->getDuration(),
-        ];
+        $data = new MovieDTO($movie);
 
         return new JsonResponse($data, Response::HTTP_OK);
     }
@@ -56,6 +53,49 @@ class MovieController extends AbstractController
 
         $this->movieRepository->createMovie($title, $duration);
 
-        return new JsonResponse(['status' => 'New movie created'], Response::HTTP_CREATED);
+        return new JsonResponse(['status' => 'New movie was created'], Response::HTTP_CREATED);
+    }
+
+    /**
+     * @Route("/movies/{id}", methods={"PUT"})
+     */
+    public function updateMovie($id, Request $request): JsonResponse
+    {
+        $movie = $this->movieRepository->findOneBy(['id' => $id]);
+
+        if (!$movie) {
+            throw new NotFoundHttpException('Movie does not exist');
+        }
+
+        $data = json_decode($request->getContent(), true);
+
+        $title = $data['title'] ?? null;
+        $duration = $data['duration'] ?? null;
+
+        if (empty($title) && empty($duration)) {
+            throw new NotFoundHttpException('Check params');
+        }
+
+        $this->movieRepository->updateMovie($movie, $title, $duration);
+
+        return new JsonResponse(['status' => 'Movie ' . $movie->getId() . ' was updated'], Response::HTTP_CREATED);
+    }
+
+    /**
+     * @Route("/movies/{id}", methods={"DELETE"})
+     */
+    public function deleteMovie($id): JsonResponse
+    {
+        $movie = $this->movieRepository->findOneBy(['id' => $id]);
+
+        if (!$movie) {
+            throw new NotFoundHttpException('Movie does not exist');
+        }
+
+        $movieId = $movie->getId();
+
+        $this->movieRepository->removeMovie($movie);
+
+        return new JsonResponse(['status' => 'Movie ' . $movieId . ' was removed'], Response::HTTP_CREATED);
     }
 }
