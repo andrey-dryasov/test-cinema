@@ -38,3 +38,11 @@ generate-movie-posters:
 
 migration:
 	docker-compose exec -T --user=application php bin/console doctrine:migrations:migrate
+
+install:
+	make re
+	make drop-db
+	make create-db
+	make import-db
+	make import-db-data
+	make migration
