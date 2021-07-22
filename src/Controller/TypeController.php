@@ -12,6 +12,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/api/types")
+ */
 class TypeController extends AbstractController
 {
     private TypeRepository $typeRepository;
@@ -22,7 +25,7 @@ class TypeController extends AbstractController
     }
 
     /**
-     * @Route("/types/{id}", methods={"GET"})
+     * @Route("/{id}", methods={"GET"})
      */
     public function getType(int $id): JsonResponse
     {
@@ -38,7 +41,7 @@ class TypeController extends AbstractController
     }
 
     /**
-     * @Route("/types/", methods={"POST"})
+     * @Route("/", methods={"POST"})
      */
     public function createType(Request $request): JsonResponse
     {
@@ -56,7 +59,7 @@ class TypeController extends AbstractController
     }
 
     /**
-     * @Route("/types/{id}", methods={"PUT"})
+     * @Route("/{id}", methods={"PUT"})
      */
     public function updateType(int $id, Request $request): JsonResponse
     {
@@ -80,7 +83,7 @@ class TypeController extends AbstractController
     }
 
     /**
-     * @Route("/types/{id}", methods={"DELETE"})
+     * @Route("/{id}", methods={"DELETE"})
      */
     public function deleteType(int $id): JsonResponse
     {

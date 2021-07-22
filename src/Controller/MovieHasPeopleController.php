@@ -14,6 +14,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/api/movies-has-people")
+ */
 class MovieHasPeopleController extends AbstractController
 {
     private MovieHasPeopleRepository $movieHasPeopleRepository;
@@ -33,7 +36,7 @@ class MovieHasPeopleController extends AbstractController
     }
 
     /**
-     * @Route("/movies-has-people/", methods={"GET"})
+     * @Route("/", methods={"GET"})
      */
     public function getMovieHasPeople(Request $request): JsonResponse
     {
@@ -57,7 +60,7 @@ class MovieHasPeopleController extends AbstractController
     }
 
     /**
-     * @Route("/movies-has-people/", methods={"POST"})
+     * @Route("/", methods={"POST"})
      */
     public function createMovieHasPeople(Request $request): JsonResponse
     {
@@ -81,7 +84,7 @@ class MovieHasPeopleController extends AbstractController
     }
 
     /**
-     * @Route("/movies-has-people/", methods={"PUT"})
+     * @Route("/", methods={"PUT"})
      */
     public function updateMovieHasPeople(Request $request): JsonResponse
     {
@@ -119,7 +122,7 @@ class MovieHasPeopleController extends AbstractController
     }
 
     /**
-     * @Route("/movies-has-people/", methods={"DELETE"})
+     * @Route("/", methods={"DELETE"})
      */
     public function deleteMovieHasPeople(Request $request): JsonResponse
     {

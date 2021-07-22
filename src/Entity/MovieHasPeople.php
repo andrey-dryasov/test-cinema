@@ -72,7 +72,7 @@ class MovieHasPeople
         return $this->role;
     }
 
-    public function setSignificance(?SignificanceType $significance): self
+    public function setSignificance(?string $significance): self
     {
         $this->significance = $significance;
 
