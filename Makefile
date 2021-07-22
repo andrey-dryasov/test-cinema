@@ -33,7 +33,7 @@ import-db:
 import-db-data:
 	cat test-cinemahd-datas.sql | docker-compose exec -T database /usr/bin/mysql -u user --password=password database
 
-imdb-synchronize:
+generate-movie-posters:
 	docker-compose exec --user=application php bin/console app:generate-movie-posters
 
 migration:

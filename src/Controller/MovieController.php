@@ -4,12 +4,13 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\DTO\MovieDTO;
+use App\DTO\Request\MovieCreateRequestDTO;
+use App\DTO\Request\MovieUpdateRequestDTO;
 use App\Repository\MovieRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -29,12 +30,7 @@ class MovieController extends AbstractController
      */
     public function getMovie(int $id): JsonResponse
     {
-        $movie = $this->movieRepository->findOneBy(['id' => $id]);
-
-        if (!$movie) {
-            throw new NotFoundHttpException('Movie does not exist');
-        }
-
+        $movie = $this->movieRepository->findMovie($id);
         $data = new MovieDTO($movie);
 
         return new JsonResponse($data, Response::HTTP_OK);
@@ -45,16 +41,9 @@ class MovieController extends AbstractController
      */
     public function createMovie(Request $request): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
+        $movieCreateRequestDTO = new MovieCreateRequestDTO($request);
 
-        $title = $data['title'];
-        $duration = $data['duration'];
-
-        if (empty($title) || empty($duration)) {
-            throw new NotFoundHttpException('Check params');
-        }
-
-        $this->movieRepository->createMovie($title, $duration);
+        $this->movieRepository->createMovie($movieCreateRequestDTO);
 
         return new JsonResponse(['status' => 'New movie was created'], Response::HTTP_CREATED);
     }
@@ -64,22 +53,10 @@ class MovieController extends AbstractController
      */
     public function updateMovie($id, Request $request): JsonResponse
     {
-        $movie = $this->movieRepository->findOneBy(['id' => $id]);
+        $movie = $this->movieRepository->findMovie($id);
+        $movieUpdateRequestDTO = new MovieUpdateRequestDTO($request);
 
-        if (!$movie) {
-            throw new NotFoundHttpException('Movie does not exist');
-        }
-
-        $data = json_decode($request->getContent(), true);
-
-        $title = $data['title'] ?? null;
-        $duration = $data['duration'] ?? null;
-
-        if (empty($title) && empty($duration)) {
-            throw new NotFoundHttpException('Check params');
-        }
-
-        $this->movieRepository->updateMovie($movie, $title, $duration);
+        $this->movieRepository->updateMovie($movie, $movieUpdateRequestDTO);
 
         return new JsonResponse(['status' => 'Movie ' . $movie->getId() . ' was updated'], Response::HTTP_CREATED);
     }
@@ -89,12 +66,7 @@ class MovieController extends AbstractController
      */
     public function deleteMovie($id): JsonResponse
     {
-        $movie = $this->movieRepository->findOneBy(['id' => $id]);
-
-        if (!$movie) {
-            throw new NotFoundHttpException('Movie does not exist');
-        }
-
+        $movie = $this->movieRepository->findMovie($id);
         $movieId = $movie->getId();
 
         $this->movieRepository->removeMovie($movie);

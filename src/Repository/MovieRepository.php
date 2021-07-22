@@ -3,10 +3,13 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\DTO\Request\MovieCreateRequestDTO;
+use App\DTO\Request\MovieUpdateRequestDTO;
 use App\Entity\Movie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class MovieRepository extends ServiceEntityRepository
 {
@@ -21,26 +24,37 @@ class MovieRepository extends ServiceEntityRepository
         $this->manager = $manager;
     }
 
-    public function createMovie(string $title, int $duration): void
+    public function findMovie(int $id): Movie
+    {
+        $movie = $this->findOneBy(['id' => $id]);
+
+        if (!$movie) {
+            throw new NotFoundHttpException('Movie does not exist');
+        }
+
+        return $movie;
+    }
+
+    public function createMovie(MovieCreateRequestDTO $movieCreateRequestDTO): void
     {
         $movie = new Movie();
 
         $movie
-            ->setTitle($title)
-            ->setDuration($duration);
+            ->setTitle($movieCreateRequestDTO->title)
+            ->setDuration($movieCreateRequestDTO->duration);
 
         $this->manager->persist($movie);
         $this->manager->flush();
     }
 
-    public function updateMovie(Movie $movie, ?string $title, ?int $duration): void
+    public function updateMovie(Movie $movie, MovieUpdateRequestDTO $movieUpdateRequestDTO): void
     {
-        if ($title) {
-            $movie->setTitle($title);
+        if ($movieUpdateRequestDTO->title) {
+            $movie->setTitle($movieUpdateRequestDTO->title);
         }
 
-        if ($duration) {
-            $movie->setDuration($duration);
+        if ($movieUpdateRequestDTO->duration) {
+            $movie->setDuration($movieUpdateRequestDTO->duration);
         }
 
         $this->manager->persist($movie);
